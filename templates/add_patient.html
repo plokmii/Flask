@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>動態新增資料</title>
+    <script>
+        function addRow() {
+            var table = document.getElementById("dataTable");
+            var row = table.insertRow(-1);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            cell1.innerHTML = '<input type="text" name="name" required>';
+            cell2.innerHTML = '<input type="number" name="age" required>';
+        }
+    </script>
+</head>
+<body>
+   <form action="/add_patient_result" method="post">
+    <h1>新增病人資訊</h1>
+    <table id="dataTable">
+        <tr>
+            <th>姓名</th>
+            <th>年齡</th>
+        </tr>
+        <tr>
+            <td><input type="text" name="name" required></td>
+            <td><input type="number" name="age" required></td>
+        </tr>
+    </table>
+    <button type="button" onclick="addRow()">新增一行</button>
+    <br><br>
+ 
+        <input type="submit" value="提交">
+    </form>
+</body>
+</html>

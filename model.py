@@ -56,6 +56,7 @@ def get_user():
         user_dic[user.email] = user.password
     return user_dic
 
+
 def is_user_validate(username,password):
     user_dic = get_user()
     if username in user_dic:
@@ -63,7 +64,8 @@ def is_user_validate(username,password):
             return True
         
     return False
-    
+
+ 
 
 
 

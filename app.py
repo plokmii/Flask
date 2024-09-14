@@ -32,6 +32,23 @@ def get_register_action():
      users = get_user()
      return str(users)
 
+
+@app.route('/add_patient')
+def add_patient():
+    return render_template('add_patient.html')
+
+@app.route('/add_patient_result', methods=['POST'])
+def result():
+    if request.method == 'POST':
+        names = request.form.getlist('name')
+        ages = request.form.getlist('age')
+
+        print('[add_patient_result] request.form:', request.form )
+        patient_dict = dict(zip(names, ages))
+        print('[add_patient_result] patient_dict:', patient_dict )
+        return str(patient_dict)
+
+
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 @app.route('/login', methods=['GET', 'POST'])
 def login():
