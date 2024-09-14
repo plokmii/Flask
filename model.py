@@ -56,6 +56,17 @@ def get_user():
         user_dic[user.email] = user.password
     return user_dic
 
+def is_user_validate(username,password):
+    user_dic = get_user()
+    if username in user_dic:
+        if user_dic[username] == password:
+            return True
+        
+    return False
+    
+
+
+
 create_db()    
 # add_user('nate', '20')
 # get_user()
