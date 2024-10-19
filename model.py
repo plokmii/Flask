@@ -17,7 +17,7 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
     email = Column(String)
-    password = Column(Integer)
+    password = Column(String)
 
     def __repr__(self):
         return f"<User(email={self.email}, password={self.password})>"
@@ -59,6 +59,10 @@ def get_user():
 
 def is_user_validate(username,password):
     user_dic = get_user()
+    print(username,type(username))
+    print(password,type(password))
+    print(user_dic)
+
     if username in user_dic:
         if user_dic[username] == password:
             return True

@@ -23,9 +23,10 @@ def register_action_func():
 
         email = request.form.get('email')
         password = request.form.get('password')
+        password = str(password)
         add_user(email, password)
 
-        return email + str(password)
+        return email + password
 
 @app.route("/register_list", methods=['GET'])
 def get_register_action():
@@ -55,6 +56,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        passowrd = str(password)
         
         # 檢查使用者名稱和密碼
 
