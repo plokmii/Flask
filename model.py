@@ -69,8 +69,58 @@ def is_user_validate(username,password):
         
     return False
 
- 
 
+# 定義一個表格模型
+class Patient(Base):
+    __tablename__ = 'patient'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    gender = Column(String)
+    age = Column(Integer)
+
+    def __repr__(self):
+        return f"<Patient(name={self.name}, gender={self.gender},age={self.age})>"
+    
+ 
+def add_patient_toDB(name,age,gender):
+
+    # 建立一個 Session 類
+    Session = sessionmaker(bind=engine)
+
+    # 建立一個 session
+    session = Session()
+
+    # 建立一個新使用者
+    new_patient = Patient(name=name, gender=gender,age=age)
+
+    # 新增使用者到 session
+    session.add(new_patient)
+
+    # 提交交易
+    session.commit()
+    session.close()
+
+def get_patient():
+    # 查詢所有使用者
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    patients = session.query(Patient).all()
+    return patients
+
+    # 顯示查詢結果
+    # patient_list_show = []
+    # for patient in patients:
+    #     patient_list_show.append(patient.name+'_'+str(patient.age)+'_'+patient.gender)
+    # return patient_list_show
+
+def get_one_patient(patient_id):
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    print("get_one_patient:",patient_id)
+    patient = session.query(Patient).get(patient_id)
+    print("get_one_patient:",patient)
+    return patient
 
 
 create_db()    

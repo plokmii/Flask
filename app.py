@@ -1,7 +1,9 @@
 from flask import Flask, request
 from flask import render_template
 from model import add_user
-from model import get_user
+from model import add_patient_toDB,get_one_patient
+from model import Patient
+from model import get_user, get_patient
 from model import is_user_validate
 from flask import Flask, session
 
@@ -43,11 +45,37 @@ def result():
     if request.method == 'POST':
         names = request.form.getlist('name')
         ages = request.form.getlist('age')
+        genders = request.form.getlist('gender')
+        patient_show_list=[]
+        #print(type(names))
+        for i in range(len(names)):
+            name=names[i]
+            age=ages[i]
+            gender=genders[i]
+            patient_show_list.append(name+'_'+str(age)+'_'+gender)
+            add_patient_toDB(name,age,gender)
 
-        print('[add_patient_result] request.form:', request.form )
-        patient_dict = dict(zip(names, ages))
-        print('[add_patient_result] patient_dict:', patient_dict )
-        return str(patient_dict)
+        return str(patient_show_list)
+    
+@app.route("/patient_list", methods=['GET'])
+def get_patient_action():
+     patients = get_patient()
+     
+     return render_template('show_patients.html', patients=patients)
+
+@app.route('/edit_patient/<int:patient_id>', methods=['GET', 'POST'])
+def edit_patient(patient_id):
+    print("patient_id:",patient_id)
+    patient = get_one_patient(patient_id)
+    
+    # if request.method == 'POST':
+    #     # 假設你從表單中取得資料並更新 user 的 name 和 gender
+    #     user.name = request.form['name']
+    #     user.gender = request.form['gender']
+    #     db.session.commit()
+    #     return redirect(url_for('show_patients'))
+    
+    return render_template('edit_patient.html', patient=patient)
 
 
 from flask import Flask, render_template, request, redirect, url_for, session, flash
