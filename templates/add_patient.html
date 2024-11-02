@@ -13,7 +13,7 @@
             cell1.innerHTML = '<input type="text" name="name" required>';
             cell2.innerHTML = '<input type="number" name="age" required>';
 			cell3.innerHTML = '<input type="text" name="gender" required>';
-			cell4.innerHTML = '<select id="drinkingStatus" name="drinking"><option value="yes">有喝酒</option><option value="no">沒有喝酒</option></select>';
+			cell4.innerHTML = '<select id="drinkingStatus" name="drinking"><option value="yes">有喝酒</option><option value="quit">有喝酒，已戒</option><option value="no">沒有喝酒</option></select>';
         }
 		
     </script>
@@ -37,8 +37,18 @@
 			  
 				<select id="drinkingStatus" name="drinking">
 					<option value="yes">有喝酒</option>
+					<option value="quit">有喝酒，已戒</option>
 					<option value="no">沒有喝酒</option>
 				</select></td>
+			<td>
+			   <label for="remarks">請輸入您的備註：</label>
+				<textarea id="remarks" name="remarks" rows="4" cols="50" placeholder="在此輸入備註...">
+				</textarea></td>
+			
+			<td>	
+				<label for="datePicker">請選擇日期：</label>
+				<input type="date" id="datePicker" name="biopsyDate" required></td>
+			
         </tr>
     </table>
     <button type="button" onclick="addRow()">新增一行</button>

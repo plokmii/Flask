@@ -16,6 +16,8 @@
 					<th>gender</th>
                     <th>age</th>
 					<th>drinking</th>
+					<th>remarks</th>
+					<th>biopsyDate</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,6 +27,8 @@
 						<td>{{ patient.gender }}</td>
                         <td>{{ patient.age }}</td>
 						<td>{{ patient.drinking }}</td>
+						<td>{{ patient.remarks }}</td>
+						<td>{{ patient.biopsyDate}}</td>
 						<td>
                             <a href="{{ url_for('edit_patient', patient_id=patient.id) }}" class="btn btn-primary btn-sm">Edit</a>
                         </td>

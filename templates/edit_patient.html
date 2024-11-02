@@ -25,9 +25,20 @@
 				<label for="drinkingStatus">Drinking Status</label>
 				<select id="drinkingStatus" name="drinking" class="form-control" required>
 					<option value="yes" {% if patient.drinking == 'yes' %}selected{% endif %}>有喝酒</option>
+					<option value="quit" {% if patient.drinking == 'quit' %}selected{% endif %}>有喝酒，已戒</option>
 					<option value="no" {% if patient.drinking == 'no' %}selected{% endif %}>沒有喝酒</option>
 				</select>
+				
+			<div class="form-group">
+				<label for="remarks">請輸入您的備註：</label>
+				<textarea id="remarks" name="remarks" class="form-control" rows="4" placeholder="在此輸入備註..." required>{{ patient.remarks }}</textarea>
 			
+			<div class="form-group">
+				<label for="datePicker">請選擇日期：</label>
+				<input type="date" id="datePicker" name="biopsyDate" required></td>
+			
+			</div>
+			</div>
 			</div>
 			</div>
 			</div>

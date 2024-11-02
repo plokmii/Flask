@@ -7,6 +7,7 @@ from model import get_user, get_patient
 from model import is_user_validate
 from flask import Flask, session
 from model import update_patient_name
+from datetime import datetime
 
 app = Flask(__name__)
 # 設定密鑰
@@ -48,10 +49,15 @@ def result():
         ages = request.form.getlist('age')
         genders = request.form.getlist('gender')
         drinkings = request.form.getlist('drinking')
+        remarkss = request.form.getlist('remarks')
+        biopsyDates = request.form.getlist('biopsyDate')
+
         print("names:",names)
         print("ages:",ages)
         print("genders:",genders)
         print("drinkings:",drinkings)
+        print("remarkss:",remarkss)
+        print("biopsyDates:",biopsyDates)
        
         patient_show_list=[]
         print("patient_show_list:",patient_show_list)
@@ -61,8 +67,12 @@ def result():
             age=ages[i]
             gender=genders[i]
             drinking=drinkings[i]
-            patient_show_list.append(name+'_'+str(age)+'_'+gender+drinking)
-            add_patient_toDB(name,age,gender,drinking)
+            remarks=remarkss[i]
+            biopsyDate=biopsyDates[i]
+            biopsyDate = datetime.strptime(biopsyDate, '%Y-%m-%d').date()  # 假設日期格式為 'YYYY-MM-DD'
+            
+            patient_show_list.append(name+'_'+str(age)+'_'+gender+'_'+drinking+'_'+remarks+'_'+str(biopsyDate))
+            add_patient_toDB(name,age,gender,drinking,remarks,biopsyDate)
 
         return str(patient_show_list)
     
@@ -84,11 +94,16 @@ def edit_patient(patient_id):
         gender = request.form['gender']
         age = request.form['age']
         drinking = request.form['drinking']
+        remarks = request.form['remarks']
+        biopsyDate = request.form['biopsyDate']
+        biopsyDate = datetime.strptime(biopsyDate, '%Y-%m-%d').date()  # 假設日期格式為 'YYYY-MM-DD'
         print("name:",name)
         print("gender:",gender)
         print("age:",age)
         print("drinking:",drinking)
-        update_patient_name(patient_id, name,gender,age,drinking)
+        print("remarks:",remarks)
+        print("biopsyDate:",biopsyDate)
+        update_patient_name(patient_id, name,gender,age,drinking,remarks,biopsyDate)
         #db.session.commit() 
         return redirect(url_for('get_patient_action'))
     

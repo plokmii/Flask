@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 # 建立資料庫連線引擎，這裡使用 SQLite 資料庫
 engine = create_engine('sqlite:///example.db', echo=True)
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Date
 from sqlalchemy.orm import declarative_base
 
 from sqlalchemy.orm import sessionmaker
@@ -79,12 +79,14 @@ class Patient(Base):
     gender = Column(String)
     age = Column(Integer)
     drinking = Column(String)
+    remarks = Column(String)
+    biopsyDate = Column(Date)
 
     def __repr__(self):
-        return f"<Patient(name={self.name}, gender={self.gender},age={self.age},drinking={self.drinking})>"
+        return f"<Patient(name={self.name}, gender={self.gender},age={self.age},drinking={self.drinking}, remarks={self.remarks})>,biopsyDate={self.biopsyDate}"
     
  
-def add_patient_toDB(name,gender,age,drinking):
+def add_patient_toDB(name,gender,age,drinking,remarks,biopsyDate):
 
     # 建立一個 Session 類
     Session = sessionmaker(bind=engine)
@@ -93,7 +95,7 @@ def add_patient_toDB(name,gender,age,drinking):
     session = Session()
 
     # 建立一個新使用者
-    new_patient = Patient(name=name, gender=gender,age=age,drinking=drinking)
+    new_patient = Patient(name=name, gender=gender,age=age,drinking=drinking,remarks=remarks,biopsyDate=biopsyDate)
 
     # 新增使用者到 session
     session.add(new_patient)
@@ -103,7 +105,7 @@ def add_patient_toDB(name,gender,age,drinking):
     session.close()
 
 
-def update_patient_name(patient_id, new_name, new_gender, new_age,new_drinking):
+def update_patient_name(patient_id, new_name, new_gender, new_age,new_drinking,new_remarks,new_biopsyDate):
 # 建立一個 Session 類
     Session = sessionmaker(bind=engine)
     # 建立一個 session
@@ -119,7 +121,9 @@ def update_patient_name(patient_id, new_name, new_gender, new_age,new_drinking):
         patient.gender = new_gender
         patient.age = new_age
         patient.drinking = new_drinking
-        
+        patient.remarks = new_remarks
+        patient.biopsyDate = new_biopsyDate
+
         # 提交交易
         session.commit()
         print(f"病人 {patient_id} 資料已更新")
