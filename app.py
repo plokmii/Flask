@@ -6,6 +6,7 @@ from model import Patient
 from model import get_user, get_patient
 from model import is_user_validate
 from flask import Flask, session
+from model import update_patient_name
 
 app = Flask(__name__)
 # 設定密鑰
@@ -46,14 +47,22 @@ def result():
         names = request.form.getlist('name')
         ages = request.form.getlist('age')
         genders = request.form.getlist('gender')
+        drinkings = request.form.getlist('drinking')
+        print("names:",names)
+        print("ages:",ages)
+        print("genders:",genders)
+        print("drinkings:",drinkings)
+       
         patient_show_list=[]
+        print("patient_show_list:",patient_show_list)
         #print(type(names))
         for i in range(len(names)):
             name=names[i]
             age=ages[i]
             gender=genders[i]
-            patient_show_list.append(name+'_'+str(age)+'_'+gender)
-            add_patient_toDB(name,age,gender)
+            drinking=drinkings[i]
+            patient_show_list.append(name+'_'+str(age)+'_'+gender+drinking)
+            add_patient_toDB(name,age,gender,drinking)
 
         return str(patient_show_list)
     
@@ -65,15 +74,23 @@ def get_patient_action():
 
 @app.route('/edit_patient/<int:patient_id>', methods=['GET', 'POST'])
 def edit_patient(patient_id):
+    print("request.method:",request.method )
     print("patient_id:",patient_id)
     patient = get_one_patient(patient_id)
     
-    # if request.method == 'POST':
-    #     # 假設你從表單中取得資料並更新 user 的 name 和 gender
-    #     user.name = request.form['name']
-    #     user.gender = request.form['gender']
-    #     db.session.commit()
-    #     return redirect(url_for('show_patients'))
+    if request.method == 'POST':
+        # 假設你從表單中取得資料並更新 user 的 name 和 gender
+        name = request.form['name']
+        gender = request.form['gender']
+        age = request.form['age']
+        drinking = request.form['drinking']
+        print("name:",name)
+        print("gender:",gender)
+        print("age:",age)
+        print("drinking:",drinking)
+        update_patient_name(patient_id, name,gender,age,drinking)
+        #db.session.commit() 
+        return redirect(url_for('get_patient_action'))
     
     return render_template('edit_patient.html', patient=patient)
 

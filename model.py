@@ -78,12 +78,13 @@ class Patient(Base):
     name = Column(String)
     gender = Column(String)
     age = Column(Integer)
+    drinking = Column(String)
 
     def __repr__(self):
-        return f"<Patient(name={self.name}, gender={self.gender},age={self.age})>"
+        return f"<Patient(name={self.name}, gender={self.gender},age={self.age},drinking={self.drinking})>"
     
  
-def add_patient_toDB(name,age,gender):
+def add_patient_toDB(name,gender,age,drinking):
 
     # 建立一個 Session 類
     Session = sessionmaker(bind=engine)
@@ -92,7 +93,7 @@ def add_patient_toDB(name,age,gender):
     session = Session()
 
     # 建立一個新使用者
-    new_patient = Patient(name=name, gender=gender,age=age)
+    new_patient = Patient(name=name, gender=gender,age=age,drinking=drinking)
 
     # 新增使用者到 session
     session.add(new_patient)
@@ -100,6 +101,36 @@ def add_patient_toDB(name,age,gender):
     # 提交交易
     session.commit()
     session.close()
+
+
+def update_patient_name(patient_id, new_name, new_gender, new_age,new_drinking):
+# 建立一個 Session 類
+    Session = sessionmaker(bind=engine)
+    # 建立一個 session
+    session = Session()
+
+    # 查詢指定 ID 的病人
+    patient = session.query(Patient).get(patient_id)
+
+
+    if patient:
+        # 更新病人的姓名
+        patient.name = new_name
+        patient.gender = new_gender
+        patient.age = new_age
+        patient.drinking = new_drinking
+        
+        # 提交交易
+        session.commit()
+        print(f"病人 {patient_id} 資料已更新")
+      
+
+    else:
+        print(f"未找到 ID 為 {patient_id} 的病人")
+
+    # 關閉 session
+    session.close()
+
 
 def get_patient():
     # 查詢所有使用者
