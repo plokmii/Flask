@@ -8,10 +8,17 @@ from model import is_user_validate
 from flask import Flask, session
 from model import update_patient_name
 from datetime import datetime
+from flask import Flask, render_template, request, redirect, url_for
+import os
+
+
+
 
 app = Flask(__name__)
 # 設定密鑰
 app.secret_key = 'jjhs123$$!'  # 請使用隨機生成的密鑰
+
+
 
 @app.route("/", methods=['GET'])
 def hello():
@@ -136,6 +143,28 @@ def profile():
     else:
         flash('請先登入！', 'warning')
         return redirect(url_for('login'))
+
+
+#upload pdf 
+UPLOAD_FOLDER = 'uploads'
+ALLOWED_EXTENSIONS = {'pdf'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+@app.route('/upload_page')
+def upload_page():
+    return render_template('upload_page.html')
+
+@app.route('/upload_action', methods=['POST'])
+def upload_file():
+    # if 'file' not in request.files:
+    #     return "No file part"
+    file = request.files['file']
+    if file.filename == '':
+        return "No selected file"
+    if file:
+        filename = file.filename
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        return f"File {filename} uploaded successfully!"
+    return "Invalid file type"
 
 
 if __name__ == "__main__":
