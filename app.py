@@ -53,33 +53,42 @@ def add_patient():
 def result():
     if request.method == 'POST':
         names = request.form.getlist('name')
+        patient_ids = request.form.getlist('patient_id')
         ages = request.form.getlist('age')
         genders = request.form.getlist('gender')
         drinkings = request.form.getlist('drinking')
         remarkss = request.form.getlist('remarks')
         biopsyDates = request.form.getlist('biopsyDate')
+        files = request.files.getlist('file')
 
         print("names:",names)
+        print("patient_ids:",patient_ids)
         print("ages:",ages)
         print("genders:",genders)
         print("drinkings:",drinkings)
         print("remarkss:",remarkss)
         print("biopsyDates:",biopsyDates)
+        print("files:",files)
        
         patient_show_list=[]
         print("patient_show_list:",patient_show_list)
         #print(type(names))
         for i in range(len(names)):
             name=names[i]
+            patient_id = patient_ids[i]
             age=ages[i]
             gender=genders[i]
             drinking=drinkings[i]
             remarks=remarkss[i]
             biopsyDate=biopsyDates[i]
             biopsyDate = datetime.strptime(biopsyDate, '%Y-%m-%d').date()  # 假設日期格式為 'YYYY-MM-DD'
+            file=files[i]
+            if file:
+                filename = file.filename
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             
-            patient_show_list.append(name+'_'+str(age)+'_'+gender+'_'+drinking+'_'+remarks+'_'+str(biopsyDate))
-            add_patient_toDB(name,age,gender,drinking,remarks,biopsyDate)
+            patient_show_list.append(name+'_'+str(age)+'_'+gender+'_'+drinking+'_'+remarks+'_'+str(biopsyDate)+str(patient_id))
+            add_patient_toDB(name,patient_id, age,gender,drinking,remarks,biopsyDate)
 
         return str(patient_show_list)
     

@@ -75,6 +75,7 @@ class Patient(Base):
     __tablename__ = 'patient'
 
     id = Column(Integer, primary_key=True)
+    patient_id = Column(String)
     name = Column(String)
     gender = Column(String)
     age = Column(Integer)
@@ -83,10 +84,10 @@ class Patient(Base):
     biopsyDate = Column(Date)
 
     def __repr__(self):
-        return f"<Patient(name={self.name}, gender={self.gender},age={self.age},drinking={self.drinking}, remarks={self.remarks})>,biopsyDate={self.biopsyDate}"
+        return f"<Patient(name={self.name}, patient_id={self.patient_id},gender={self.gender},age={self.age},drinking={self.drinking}, remarks={self.remarks})>,biopsyDate={self.biopsyDate}"
     
  
-def add_patient_toDB(name,gender,age,drinking,remarks,biopsyDate):
+def add_patient_toDB(name,patient_id,gender,age,drinking,remarks,biopsyDate):
 
     # 建立一個 Session 類
     Session = sessionmaker(bind=engine)
@@ -95,7 +96,7 @@ def add_patient_toDB(name,gender,age,drinking,remarks,biopsyDate):
     session = Session()
 
     # 建立一個新使用者
-    new_patient = Patient(name=name, gender=gender,age=age,drinking=drinking,remarks=remarks,biopsyDate=biopsyDate)
+    new_patient = Patient(name=name, patient_id=patient_id, gender=gender,age=age,drinking=drinking,remarks=remarks,biopsyDate=biopsyDate)
 
     # 新增使用者到 session
     session.add(new_patient)
@@ -105,7 +106,7 @@ def add_patient_toDB(name,gender,age,drinking,remarks,biopsyDate):
     session.close()
 
 
-def update_patient_name(patient_id, new_name, new_gender, new_age,new_drinking,new_remarks,new_biopsyDate):
+def update_patient_name(patient_id, new_name, new_patient_id, new_gender, new_age,new_drinking,new_remarks,new_biopsyDate):
 # 建立一個 Session 類
     Session = sessionmaker(bind=engine)
     # 建立一個 session
@@ -118,6 +119,7 @@ def update_patient_name(patient_id, new_name, new_gender, new_age,new_drinking,n
     if patient:
         # 更新病人的姓名
         patient.name = new_name
+        patient.patient_id = new_patient_id
         patient.gender = new_gender
         patient.age = new_age
         patient.drinking = new_drinking

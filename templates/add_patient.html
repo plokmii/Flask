@@ -19,18 +19,24 @@
     </script>
 </head>
 <body>
-   <form action="/add_patient_result" method="post">
+   <form action="/add_patient_result" method="post" enctype="multipart/form-data">
     <h1>新增病人資訊</h1>
     <table id="dataTable">
         <tr>
             <th>姓名</th>
+			<th>病歷號</th>
             <th>年齡</th>
 			<th>性別</th>
 			<th>飲酒狀態</th>
+			<th>備註</th>
+			<th>日期</th>
+			<th>上傳pdf</th>
 			
         </tr>
         <tr>
             <td><input type="text" name="name" required></td>
+			<td><input type="text" id="patient_id" name="patient_id" maxlength="6" minlength="6" required>
+			
             <td><input type="number" id="age" name="age" min="1" max="100" step="1" required>
 			<td><input type="text" name="gender" required></td>
 			<td>
@@ -48,6 +54,8 @@
 			<td>	
 				<label for="datePicker">請選擇日期：</label>
 				<input type="date" id="datePicker" name="biopsyDate" required></td>
+			<td>
+				<input type="file" name="file" accept="application/pdf" required></td>
 			
         </tr>
     </table>
