@@ -32,6 +32,9 @@
 						<td>
                             <a href="{{ url_for('edit_patient', patient_id=patient.id) }}" class="btn btn-primary btn-sm">Edit</a>
                         </td>
+						<td>
+                            <a href="{{ url_for('show_patient_pdf', patient_id=patient.id) }}" class="btn btn-primary btn-sm">PDF</a>
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

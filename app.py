@@ -10,6 +10,7 @@ from model import update_patient_name
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for
 import os
+from flask import Flask, render_template, send_from_directory
 
 
 
@@ -84,7 +85,8 @@ def result():
             biopsyDate = datetime.strptime(biopsyDate, '%Y-%m-%d').date()  # 假設日期格式為 'YYYY-MM-DD'
             file=files[i]
             if file:
-                filename = file.filename
+                filename = str(patient_id) +'_chartID.pdf'
+                print("filename:",filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             
             patient_show_list.append(name+'_'+str(age)+'_'+gender+'_'+drinking+'_'+remarks+'_'+str(biopsyDate)+str(patient_id))
@@ -101,7 +103,7 @@ def get_patient_action():
 @app.route('/edit_patient/<int:patient_id>', methods=['GET', 'POST'])
 def edit_patient(patient_id):
     print("request.method:",request.method )
-    print("patient_id:",patient_id)
+    print("_id:",patient_id)
     patient = get_one_patient(patient_id)
     
     if request.method == 'POST':
@@ -124,6 +126,23 @@ def edit_patient(patient_id):
         return redirect(url_for('get_patient_action'))
     
     return render_template('edit_patient.html', patient=patient)
+
+
+@app.route('/uploads/<path:filename>')
+def uploaded_file(filename):
+    print("upload_file function:",filename)
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename,as_attachment=False)
+
+
+
+@app.route('/show_patient_pdf/<int:patient_id>', methods=['GET'])
+def show_patient_pdf(patient_id):
+    print("pdf preview function:",patient_id)
+    patient = get_one_patient(patient_id)
+    print("patient.patient_id:",patient.patient_id)
+    filename = str(patient.patient_id) +'_chartID.pdf'
+    return render_template('pdf_preview.html',filename=filename)
+
 
 
 from flask import Flask, render_template, request, redirect, url_for, session, flash
@@ -158,22 +177,23 @@ def profile():
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'pdf'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 @app.route('/upload_page')
 def upload_page():
     return render_template('upload_page.html')
 
-@app.route('/upload_action', methods=['POST'])
-def upload_file():
-    # if 'file' not in request.files:
-    #     return "No file part"
-    file = request.files['file']
-    if file.filename == '':
-        return "No selected file"
-    if file:
-        filename = file.filename
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return f"File {filename} uploaded successfully!"
-    return "Invalid file type"
+# @app.route('/upload_action', methods=['POST'])
+# def upload_file():
+#     # if 'file' not in request.files:
+#     #     return "No file part"
+#     file = request.files['file']
+#     if file.filename == '':
+#         return "No selected file"
+#     if file:
+#         filename = file.filename
+#         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#         return f"File {filename} uploaded successfully!"
+#     return "Invalid file type"
 
 
 if __name__ == "__main__":
