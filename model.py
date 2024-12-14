@@ -171,23 +171,27 @@ class PatientExtendData(Base):
 
 
 def add_patient_extend_data(patient_id, height, weight):
-
     # 建立一個 Session 類
     Session = sessionmaker(bind=engine)
 
     # 建立一個 session
     session = Session()
 
-    # 建立一個新使用者
-    new_user = PatientExtendData(patient_id=patient_id, height=height,weight=weight)
+    # 查詢是否已存在相同的 patient_id
+    existing_user = session.query(PatientExtendData).filter_by(patient_id=patient_id).first()
 
-    # 新增使用者到 session
-    session.add(new_user)
+    if existing_user:
+        # 如果存在，更新現有記錄
+        existing_user.height = height
+        existing_user.weight = weight
+    else:
+        # 如果不存在，建立一個新使用者
+        new_user = PatientExtendData(patient_id=patient_id, height=height, weight=weight)
+        session.add(new_user)
 
     # 提交交易
     session.commit()
     session.close()
-create_db()    
 
 
 def get_patient_extend_data():
