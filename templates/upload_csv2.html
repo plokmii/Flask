@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV File Upload</title>
+</head>
+<body>
+
+    <h2>Upload a CSV File</h2>
+
+    <!-- Form to upload the file -->
+    <form action="/upload_csv_action" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" accept="application/CSV" required>
+        <br><br>
+        <button type="submit">Upload CSV</button>
+    </form>
+
+</body>
+</html>

@@ -159,7 +159,41 @@ def get_one_patient(patient_id):
     print("get_one_patient:",patient)
     return patient
 
+class PatientExtendData(Base):
+    __tablename__ = 'PatientExtendData'
 
+    patient_id = Column(Integer, primary_key=True)
+    height = Column(Integer)
+    weight = Column(Integer)
+    def __repr__(self):
+        return f"<PatientExtendData(patient_id={self.patient_id}, height={self.height}, weight={self.weight})>"
+
+
+
+def add_patient_extend_data(patient_id, height, weight):
+
+    # 建立一個 Session 類
+    Session = sessionmaker(bind=engine)
+
+    # 建立一個 session
+    session = Session()
+
+    # 建立一個新使用者
+    new_user = PatientExtendData(patient_id=patient_id, height=height,weight=weight)
+
+    # 新增使用者到 session
+    session.add(new_user)
+
+    # 提交交易
+    session.commit()
+    session.close()
 create_db()    
+
+
+def get_patient_extend_data():
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    patients = session.query(PatientExtendData).all()
+    return patients
 # add_user('nate', '20')
 # get_user()

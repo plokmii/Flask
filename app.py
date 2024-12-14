@@ -11,8 +11,9 @@ from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for
 import os
 from flask import Flask, render_template, send_from_directory
-
-
+import pandas as pd
+from model import add_patient_extend_data
+from model import get_patient_extend_data
 
 
 app = Flask(__name__)
@@ -182,19 +183,47 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def upload_page():
     return render_template('upload_page.html')
 
-# @app.route('/upload_action', methods=['POST'])
-# def upload_file():
-#     # if 'file' not in request.files:
-#     #     return "No file part"
-#     file = request.files['file']
-#     if file.filename == '':
-#         return "No selected file"
-#     if file:
-#         filename = file.filename
-#         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-#         return f"File {filename} uploaded successfully!"
-#     return "Invalid file type"
+#upload csv 
+UPLOAD_CSV = 'csv'
+ALLOWED_EXTENSIONS = {'csv'}
+app.config['UPLOAD_CSV'] = UPLOAD_CSV
 
+@app.route('/upload_csv')
+def upload_csv():
+
+    return render_template('upload_csv.html')
+
+@app.route('/upload_csv_action', methods=['POST'])
+def upload_file():
+    # if 'file' not in request.files:
+    #     return "No file part"
+    file = request.files['file']
+    if file.filename == '':
+        return "No selected file"
+    if file:
+        filename = file.filename
+        file.save(os.path.join(app.config['UPLOAD_CSV'], filename))
+        parse_extend_data(os.path.join(app.config['UPLOAD_CSV'], filename))
+        return f"File {filename} uploaded successfully!"
+    return "Invalid file type"
+
+def parse_extend_data(filename):
+    df = pd.read_csv(filename)
+    df=df[["patient_id","height","weight"]]
+
+    for index, row in df.iterrows():
+        patient_id = int(row['patient_id'])
+        height = int(row['height'])
+        weight = int(row['weight'])
+        add_patient_extend_data(patient_id,height,weight)
+       
+@app.route("/patient_extend_data_list", methods=['GET'])
+def get_extend_data_action():
+
+
+     patient_extend_data = get_patient_extend_data()
+     
+     return render_template('show_patient_extend_data.html', patient_extend_data=patient_extend_data)
 
 if __name__ == "__main__":
     app.run(debug=False)
