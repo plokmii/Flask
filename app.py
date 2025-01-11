@@ -8,7 +8,7 @@ from model import is_user_validate,is_user_validate_editor
 from flask import Flask, session
 from model import update_patient_name
 from datetime import datetime
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file
 import os
 from flask import Flask, render_template, send_from_directory
 import pandas as pd
@@ -95,14 +95,33 @@ def result():
 
         return str(patient_show_list)
     
-@app.route("/patient_list", methods=['GET'])
+@app.route("/patient_list", methods=['GET', 'POST'])
 def get_patient_action():
-     print("session:",session)
-     if session["user_level"]==1:  
+    print("session:",session)
+    if request.method == 'POST':
+        # 按鈕被按下，下載CSV
+        return download_csv()
+
+
+    if session["user_level"]==1:  
         patients = get_patient()
         return render_template('show_patients.html', patients=patients)
-     else:
+    else:
         return("You are not editor")
+
+def download_csv():
+    # 連接資料庫並讀取表格
+    patients = get_patient()
+    df = pd.DataFrame([patient.__dict__ for patient in patients])
+    df = df[['name','age','remarks','gender','id','drinking','biopsyDate']]
+    # 將DataFrame存成CSV
+    df.to_csv('output.csv', index=False)
+    print("download_csv:",df)
+    return send_file('output.csv', as_attachment=True)
+    # 下載CSV檔案
+    #return send_file('output.csv', as_attachment=True)
+
+
 
 @app.route('/edit_patient/<int:patient_id>', methods=['GET', 'POST'])
 def edit_patient(patient_id):
