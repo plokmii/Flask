@@ -4,7 +4,7 @@ from model import add_user
 from model import add_patient_toDB,get_one_patient
 from model import Patient
 from model import get_user, get_patient
-from model import is_user_validate
+from model import is_user_validate,is_user_validate_editor
 from flask import Flask, session
 from model import update_patient_name
 from datetime import datetime
@@ -36,8 +36,8 @@ def register_action_func():
 
         email = request.form.get('email')
         password = request.form.get('password')
-        password = str(password)
-        add_user(email, password)
+        password = str(password)       
+        add_user(email, password,2)
 
         return email + password
 
@@ -97,9 +97,12 @@ def result():
     
 @app.route("/patient_list", methods=['GET'])
 def get_patient_action():
-     patients = get_patient()
-     
-     return render_template('show_patients.html', patients=patients)
+     print("session:",session)
+     if session["user_level"]==1:  
+        patients = get_patient()
+        return render_template('show_patients.html', patients=patients)
+     else:
+        return("You are not editor")
 
 @app.route('/edit_patient/<int:patient_id>', methods=['GET', 'POST'])
 def edit_patient(patient_id):
@@ -157,7 +160,13 @@ def login():
         # 檢查使用者名稱和密碼
 
         if is_user_validate(username,password):
+            session['user_level'] = 2
             session['username'] = username  # 將使用者名稱儲存在 session 中
+
+            tmp = is_user_validate_editor(username,password)
+            if tmp:
+                session['user_level'] = 1
+                
             flash('登入成功！', 'success')
             return redirect(url_for('profile'))
         else:
@@ -219,10 +228,7 @@ def parse_extend_data(filename):
        
 @app.route("/patient_extend_data_list", methods=['GET'])
 def get_extend_data_action():
-
-
      patient_extend_data = get_patient_extend_data()
-     
      return render_template('show_patient_extend_data.html', patient_extend_data=patient_extend_data)
 
 if __name__ == "__main__":
