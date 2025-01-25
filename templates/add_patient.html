@@ -10,10 +10,19 @@
             var cell2 = row.insertCell(1);
 			var cell3 = row.insertCell(2);
 			var cell4 = row.insertCell(3);
+			var cell5 = row.insertCell(4);
+			var cell6 = row.insertCell(5);
+			var cell7 = row.insertCell(6);
+			var cell8 = row.insertCell(7);
             cell1.innerHTML = '<input type="text" name="name" required>';
-            cell2.innerHTML = '<input type="number" name="age" required>';
-			cell3.innerHTML = '<input type="text" name="gender" required>';
-			cell4.innerHTML = '<select id="drinkingStatus" name="drinking"><option value="yes">有喝酒</option><option value="quit">有喝酒，已戒</option><option value="no">沒有喝酒</option></select>';
+			cell2.innerHTML = '<input type="text" name="patient_str_id" >';
+            cell3.innerHTML = '<input type="number" name="age" required>';
+			cell4.innerHTML = '<input type="text" name="gender" required>';
+			cell5.innerHTML = '<select id="drinkingStatus" name="drinking"><option value="yes">有喝酒</option><option value="quit">有喝酒，已戒</option><option value="no">沒有喝酒</option></select>';
+			cell6.innerHTML = '<input type="text" name="remarks" >';
+			cell7.innerHTML = '<input type="date" name="biopsyDate" required>';
+			cell8.innerHTML = '<input type="file" name="file" required>';
+
         }
 		
     </script>
@@ -35,7 +44,7 @@
         </tr>
         <tr>
             <td><input type="text" name="name" required></td>
-			<td><input type="text" id="patient_id" name="patient_id" maxlength="6" minlength="6" required>
+			<td><input type="text" id="patient_str_id" name="patient_str_id" maxlength="6" minlength="6" required>
 			
             <td><input type="number" id="age" name="age" min="1" max="100" step="1" required>
 			<td><input type="text" name="gender" required></td>

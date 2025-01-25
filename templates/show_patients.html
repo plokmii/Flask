@@ -8,7 +8,15 @@
 </head>
 <body>
     <div class="container">
-	    <form action="" method="post">
+	    <form action="/search" method="post">
+			<input type="text" name="query_name" placeholder="輸入病人姓名">
+			<input type="text" name="query_gender" placeholder="輸入病人性別">
+			<input type="submit" value="搜尋">
+        </form>
+		
+		<p>目前有 {{ patients | length }} 位病人。</p>
+		
+		<form action="" method="post">
         <input type="submit" value="下載CSV" name="download_csv">
 		</form>
 
@@ -17,22 +25,26 @@
             <thead>
                 <tr>
                     <th>name</th>
+					<th>patient_str_id</th>
+					<th>age</th>
 					<th>gender</th>
-                    <th>age</th>
 					<th>drinking</th>
 					<th>remarks</th>
 					<th>biopsyDate</th>
+					<th>file</th>
                 </tr>
             </thead>
             <tbody>
                 {% for patient in patients %}
                     <tr>
                         <td>{{ patient.name }}</td>
-						<td>{{ patient.gender }}</td>
-                        <td>{{ patient.age }}</td>
+						<td>{{ patient.patient_str_id }}</td>
+						 <td>{{ patient.age }}</td>
+						<td>{{ patient.gender }}</td>         
 						<td>{{ patient.drinking }}</td>
 						<td>{{ patient.remarks }}</td>
 						<td>{{ patient.biopsyDate}}</td>
+						<td>{{ patient.file}}</td>
 						<td>
                             <a href="{{ url_for('edit_patient', patient_id=patient.id) }}" class="btn btn-primary btn-sm">Edit</a>
                         </td>

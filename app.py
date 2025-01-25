@@ -1,7 +1,7 @@
 from flask import Flask, request
 from flask import render_template
 from model import add_user
-from model import add_patient_toDB,get_one_patient
+from model import add_patient_toDB,get_one_patient,get_patients_by_filters
 from model import Patient
 from model import get_user, get_patient
 from model import is_user_validate,is_user_validate_editor
@@ -55,16 +55,17 @@ def add_patient():
 def result():
     if request.method == 'POST':
         names = request.form.getlist('name')
-        patient_ids = request.form.getlist('patient_id')
-        ages = request.form.getlist('age')
+        patient_str_ids = request.form.getlist('patient_str_id')
+        
         genders = request.form.getlist('gender')
+        ages = request.form.getlist('age')
         drinkings = request.form.getlist('drinking')
         remarkss = request.form.getlist('remarks')
         biopsyDates = request.form.getlist('biopsyDate')
         files = request.files.getlist('file')
 
         print("names:",names)
-        print("patient_ids:",patient_ids)
+        print("patient_str_ids:",patient_str_ids)
         print("ages:",ages)
         print("genders:",genders)
         print("drinkings:",drinkings)
@@ -77,7 +78,7 @@ def result():
         #print(type(names))
         for i in range(len(names)):
             name=names[i]
-            patient_id = patient_ids[i]
+            patient_str_id = patient_str_ids[i]
             age=ages[i]
             gender=genders[i]
             drinking=drinkings[i]
@@ -86,12 +87,12 @@ def result():
             biopsyDate = datetime.strptime(biopsyDate, '%Y-%m-%d').date()  # 假設日期格式為 'YYYY-MM-DD'
             file=files[i]
             if file:
-                filename = str(patient_id) +'_chartID.pdf'
+                filename = str(patient_str_id) +'_chartID.pdf'
                 print("filename:",filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             
-            patient_show_list.append(name+'_'+str(age)+'_'+gender+'_'+drinking+'_'+remarks+'_'+str(biopsyDate)+str(patient_id))
-            add_patient_toDB(name,patient_id, age,gender,drinking,remarks,biopsyDate)
+            patient_show_list.append(name+'_'+str(patient_str_id)+'_'+gender+'_'+str(age)+'_'+drinking+'_'+remarks+'_'+str(biopsyDate))
+            add_patient_toDB(name,patient_str_id, gender,age,drinking,remarks,biopsyDate)
 
         return str(patient_show_list)
     
@@ -102,12 +103,13 @@ def get_patient_action():
         # 按鈕被按下，下載CSV
         return download_csv()
 
-
-    if session["user_level"]==1:  
+    
+    if "user_level" in session and session["user_level"]==1:  
         patients = get_patient()
         return render_template('show_patients.html', patients=patients)
     else:
         return("You are not editor")
+
 
 def download_csv():
     # 連接資料庫並讀取表格
@@ -122,6 +124,23 @@ def download_csv():
     #return send_file('output.csv', as_attachment=True)
 
 
+@app.route('/search', methods=['POST'])
+def search():
+    filters = {}
+
+    query_name = request.form.get('query_name')
+    if len(query_name)>0:
+        filters["name"]= query_name
+
+    query_gender = request.form.get('query_gender')
+    if len(query_gender)>0:
+        filters["gender"]= query_gender
+
+    print("!!!!!!!!!filters:", filters)
+    results = get_patients_by_filters(filters)
+    return render_template('show_patients.html', patients=results)
+
+ 
 
 @app.route('/edit_patient/<int:patient_id>', methods=['GET', 'POST'])
 def edit_patient(patient_id):
@@ -133,6 +152,7 @@ def edit_patient(patient_id):
         # 假設你從表單中取得資料並更新 user 的 name 和 gender
         name = request.form['name']
         gender = request.form['gender']
+        patient_str_id = request.form['patient_str_id']
         age = request.form['age']
         drinking = request.form['drinking']
         remarks = request.form['remarks']
@@ -144,7 +164,7 @@ def edit_patient(patient_id):
         print("drinking:",drinking)
         print("remarks:",remarks)
         print("biopsyDate:",biopsyDate)
-        update_patient_name(patient_id, name,gender,age,drinking,remarks,biopsyDate)
+        update_patient_name(patient_id, name,gender,patient_str_id,age,drinking,remarks,biopsyDate)
         #db.session.commit() 
         return redirect(url_for('get_patient_action'))
     
