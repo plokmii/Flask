@@ -131,7 +131,7 @@ def add_patient_toDB(name,patient_str_id,gender,age,drinking,remarks,biopsyDate)
     session.close()
 
 
-def update_patient_name(patient_id, new_name, new_patient_str_id, new_gender, new_age,new_drinking,new_remarks,new_biopsyDate):
+def update_patient_name(patient_id, new_patient_str_id, new_name, new_age,new_gender, new_drinking,new_remarks,new_biopsyDate):
 # 建立一個 Session 類
     Session = sessionmaker(bind=engine)
     # 建立一個 session
@@ -143,10 +143,10 @@ def update_patient_name(patient_id, new_name, new_patient_str_id, new_gender, ne
 
     if patient:
         # 更新病人的姓名
-        patient.name = new_name
         patient.patient_str_id = new_patient_str_id
-        patient.gender = new_gender
+        patient.name = new_name
         patient.age = new_age
+        patient.gender = new_gender
         patient.drinking = new_drinking
         patient.remarks = new_remarks
         patient.biopsyDate = new_biopsyDate

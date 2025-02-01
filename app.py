@@ -150,23 +150,25 @@ def edit_patient(patient_id):
     
     if request.method == 'POST':
         # 假設你從表單中取得資料並更新 user 的 name 和 gender
-        name = request.form['name']
-        gender = request.form['gender']
         patient_str_id = request.form['patient_str_id']
+        name = request.form['name']
         age = request.form['age']
+        gender = request.form['gender']
         drinking = request.form['drinking']
         remarks = request.form['remarks']
         biopsyDate = request.form['biopsyDate']
         biopsyDate = datetime.strptime(biopsyDate, '%Y-%m-%d').date()  # 假設日期格式為 'YYYY-MM-DD'
         print("name:",name)
-        print("gender:",gender)
         print("age:",age)
+        print("gender:",gender)
         print("drinking:",drinking)
         print("remarks:",remarks)
         print("biopsyDate:",biopsyDate)
-        update_patient_name(patient_id, name,gender,patient_str_id,age,drinking,remarks,biopsyDate)
+        update_patient_name(patient_id, patient_str_id,name,age,gender,drinking,remarks,biopsyDate)
         #db.session.commit() 
         return redirect(url_for('get_patient_action'))
+    else:
+        patient.biopsyDate = patient.biopsyDate.strftime('%Y-%m-%d')
     
     return render_template('edit_patient.html', patient=patient)
 
