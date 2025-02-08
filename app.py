@@ -14,7 +14,7 @@ from flask import Flask, render_template, send_from_directory
 import pandas as pd
 from model import add_patient_extend_data
 from model import get_patient_extend_data
-
+import pygsheets
 
 app = Flask(__name__)
 # 設定密鑰
@@ -103,12 +103,32 @@ def get_patient_action():
         # 按鈕被按下，下載CSV
         return download_csv()
 
+    save_csv_and_upload_GoogleSheet()
     
     if "user_level" in session and session["user_level"]==1:  
         patients = get_patient()
         return render_template('show_patients.html', patients=patients)
     else:
         return("You are not editor")
+
+
+def save_csv_and_upload_GoogleSheet():
+    patients = get_patient()
+    df = pd.DataFrame([patient.__dict__ for patient in patients])
+    df = df[['name','age','remarks','gender','id','drinking','biopsyDate']]
+    # 將DataFrame存成CSV
+   
+    gc = pygsheets.authorize(service_file='solid-alignment-450302-k1-b6862df4042a.json')
+
+    sht = gc.open_by_url(
+    'https://https://docs.google.com/spreadsheets/d/1pAjgOt6YWTjzBYhCDcAOCW_ltf1VS1ke-LzM2TgELgc/edit?gid=0#gid=0'
+    )
+    wks = sht.worksheet(property='title', value='Sheet1')
+    # 將DataFrame匯入工作表中，從A1開始寫入資料，包含標題列
+    wks.clear()
+    wks.set_dataframe(df, start='A1')
+    print("Save Google Sheet Sucessful")
+
 
 
 def download_csv():
