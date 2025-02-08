@@ -1,0 +1,131 @@
+[33mcommit c4f12ccae9b40889a1aa22be481350311991f05f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m)[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Feb 7 22:48:15 2025 -0500
+
+    refresh CSV and upload Google Sheet and looker Studio
+
+[33mcommit 4cc82609579912df73226cd5b1d7a1792bd3a282[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Feb 7 22:45:11 2025 -0500
+
+    refresh CSV and upload Google Sheet and looker Studio
+
+[33mcommit 9aa0f681868ea43568b2b9002bd58e8675f2e289[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Feb 7 22:41:33 2025 -0500
+
+    refresh CSV and upload Google Sheet and looker Studio
+
+[33mcommit a877a664ccdc8f05bb1598eae0575d414a63708f[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Feb 7 22:39:06 2025 -0500
+
+    refresh CSV and upload Google Sheet and looker Studio
+
+[33mcommit 75b1a3255d85efce81acefe20fd23870756b7529[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Feb 7 22:35:41 2025 -0500
+
+    refresh CSV and upload Google Sheet and looker Studio
+
+[33mcommit b017204d310744aacc5c0d186562f486c876b123[m[33m ([m[1;31morigin/master[m[33m)[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Jan 31 23:00:10 2025 -0500
+
+    Biopsy_Date沒顯示日期
+
+[33mcommit d06d13d6affc3033e21228c7b471e9603b4c69b9[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Jan 24 23:06:07 2025 -0500
+
+    Sql資料表查詢
+
+[33mcommit e6cba84e0f9f2092003626fa8498f75dc05e6db3[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Jan 10 22:57:09 2025 -0500
+
+    把patient_list下載成csv
+
+[33mcommit 6bf72f11d9dcd5e355e3caa464628bc60afbfeb0[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Jan 10 22:32:39 2025 -0500
+
+    加上登入權限user與editor
+
+[33mcommit 09b870e71b1eb32ba251b0eae4bcf82863fed004[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Dec 13 22:59:28 2024 -0500
+
+    CSV上傳可覆蓋
+
+[33mcommit 9a8a83cb6e3d442a59418c67607878a853073c74[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Dec 13 22:53:33 2024 -0500
+
+    Upload CSV in database
+
+[33mcommit f7132f97f927a16e2175114194440be8121eca13[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Nov 22 23:02:03 2024 -0500
+
+    PDF上傳後可以直接preview
+
+[33mcommit a948240871351352342176ede903299ebae596c8[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Nov 8 23:01:57 2024 -0500
+
+    上傳pdf加在add_patient_list
+
+[33mcommit 0d254d842a92807ee603a80ab822557d8a19fc59[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Nov 8 22:20:49 2024 -0500
+
+    upload pdf files
+
+[33mcommit 998169f61b940a1e613009723a87063ea1b894a1[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Nov 1 23:54:13 2024 -0400
+
+    欄位required
+
+[33mcommit 0530d7dc7f0f290a371bb5ea7f4ba218bbedab72[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Nov 1 23:51:31 2024 -0400
+
+    Add BiopsyDate and remarks
+
+[33mcommit aa3f22a38f08f67282c86c23c4b185cfa10e7983[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Nov 1 23:14:00 2024 -0400
+
+    add edit feature and drinking column
+
+[33mcommit ea4fce3dfc72a11b6ed40713d3676fdc9baa6d78[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Sat Oct 19 00:12:15 2024 -0400
+
+    Edit patient page
+
+[33mcommit be88119a6824668147ccd4f7db7797dae7e1872e[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Oct 18 22:28:28 2024 -0400
+
+    Fix_bug_register_integer to string error
+
+[33mcommit 9fbd943234b96bb0882b76a64c8389e172a7c624[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Sat Sep 14 00:02:55 2024 -0400
+
+    add patient information
+
+[33mcommit f27ec3d8be974d70a23c676293912d95dda03330[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Sep 13 23:32:27 2024 -0400
+
+    login feature
+
+[33mcommit 4719d495d4a62e56adf631a00b37b55418d81350[m
+Author: plokmii <okokyytt@gmail.com>
+Date:   Fri Sep 13 22:27:00 2024 -0400
+
+    Initial git
