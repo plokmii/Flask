@@ -20,7 +20,17 @@ app = Flask(__name__)
 # 設定密鑰
 app.secret_key = 'jjhs123$$!'  # 請使用隨機生成的密鑰
 
+import configparser
+config = configparser.ConfigParser()
+    
+# 讀取配置文件（假設檔名為 config.ini）
+config.read('myconfig.ini')
+    
+    # 讀取資料庫帳密和 API 配置
+Line_access_token = config.get('Line', 'access_token')
+Line_access_user_id = config.get('Line', 'user_id')
 
+Google_Studio_Looker_url = config.get('Google_Studio_Looker', 'google_url')
 
 @app.route("/", methods=['GET'])
 def hello():
@@ -76,6 +86,8 @@ def result():
         patient_show_list=[]
         print("patient_show_list:",patient_show_list)
         #print(type(names))
+
+        line_notice_str = ''
         for i in range(len(names)):
             name=names[i]
             patient_str_id = patient_str_ids[i]
@@ -91,11 +103,53 @@ def result():
                 print("filename:",filename)
                 file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             
+            line_notice_str += name + '_'+ patient_str_id + '_' + str(biopsyDate) + '\n' 
+
             patient_show_list.append(name+'_'+str(patient_str_id)+'_'+gender+'_'+str(age)+'_'+drinking+'_'+remarks+'_'+str(biopsyDate))
             add_patient_toDB(name,patient_str_id, gender,age,drinking,remarks,biopsyDate)
 
+        line_notice(line_notice_str)
+        save_csv_and_upload_GoogleSheet()
         return str(patient_show_list)
     
+        
+    
+
+import requests, json
+
+def line_notice(message):
+
+    # 設定Access Token和用戶ID
+    access_token = Line_access_token
+    user_id = Line_access_user_id
+   
+
+    # 設定標頭和內容
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+        'Content-Type': 'application/json'
+    }
+    
+    body = {
+        'to': user_id,
+        'messages': [
+            {
+                'type': 'text',
+                'text': message
+            }
+        ]
+    }
+    
+    # 發送請求
+    req = requests.request('POST', 
+                           url='https://api.line.me/v2/bot/message/push', 
+                           headers=headers, 
+                           data=json.dumps(body).encode('utf-8'))
+    
+
+    
+    print(req.text)
+
 @app.route("/patient_list", methods=['GET', 'POST'])
 def get_patient_action():
     print("session:",session)
@@ -103,7 +157,7 @@ def get_patient_action():
         # 按鈕被按下，下載CSV
         return download_csv()
 
-    save_csv_and_upload_GoogleSheet()
+    #save_csv_and_upload_GoogleSheet()
     
     if "user_level" in session and session["user_level"]==1:  
         patients = get_patient()
@@ -117,12 +171,14 @@ def save_csv_and_upload_GoogleSheet():
     df = pd.DataFrame([patient.__dict__ for patient in patients])
     df = df[['name','age','remarks','gender','id','drinking','biopsyDate']]
     # 將DataFrame存成CSV
-   
+    
+
     gc = pygsheets.authorize(service_file='solid-alignment-450302-k1-b6862df4042a.json')
 
     sht = gc.open_by_url(
-    'https://https://docs.google.com/spreadsheets/d/1pAjgOt6YWTjzBYhCDcAOCW_ltf1VS1ke-LzM2TgELgc/edit?gid=0#gid=0'
+    Google_Studio_Looker_url
     )
+
     wks = sht.worksheet(property='title', value='Sheet1')
     # 將DataFrame匯入工作表中，從A1開始寫入資料，包含標題列
     wks.clear()
